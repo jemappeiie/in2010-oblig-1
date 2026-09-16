@@ -3,6 +3,9 @@ from math import floor
 from collections import deque
 
 
+"""Task 1a"""
+
+
 class Teque:
     def __init__(self):
         self.left = deque()
@@ -46,17 +49,24 @@ if __name__ == "__main__":
         elif cmd == "get":
             print(teque.get(num))
 
-"""b
-    I don't freaking know???
+"""Task 1b
+    def balance(self): O(1)
+    I don't know how python implements deque(), but a normal deque remove/add/lookup is O(1)
+    Dequeue is a dynamic list uses a head and tail pointer to achieve constant time completixy.
+    balance() function is only using len(), append(), appendleft(), pop(), popleft(). All these methods by themselves are O(1), making balance() constant time as well
 
-    def balance(self): O(67)
-
-    def pushback(self, x): O(69)
+    def pushback(self, x): O(1)
+    Constant time for pushback(), it uses balance() and <dequeue>.append() both of which are O(1)
     
-    def pushfront(self, x): O(420)
+    def pushfront(self, x): O(1)
+    Constant time for pushfront(), it uses balance() and <dequeue>.appendleft() both of which are O(1)
 
-    def pushmiddle(self, x): O(42)
+    def pushmiddle(self, x): O(1)
+    Constant time for pushmiddle(), it uses balance() and <dequeue>.append() both of which are O(1)
 
-    def get(self, i): O(1337)
+    def get(self, i): O(1)
+    Lookup index[i], len() are all constant time making get() constant as well
 
+    *Note that in reality these functions might not be constant depending on how python interpreter handles alloction.
+    KISS 
 """
