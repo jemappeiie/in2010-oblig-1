@@ -1,6 +1,5 @@
 import sys
 import fileinput
-import numpy as np
 
 
 def main():
@@ -37,11 +36,12 @@ def mergesort(A):
     n = len(A)
     if n <= 1:
         return A
-    i = int(np.floor(n / 2))
+    i = n // 2
     A_1 = mergesort(A[:i])
     A_2 = mergesort(A[i:])
 
     return merge(A_1, A_2, A)
+
 
 """
 Core idea: Divide (Split) and conquer (Merge)
