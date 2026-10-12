@@ -182,6 +182,10 @@ def find_components(actors, actor_to_movies, movie_to_actors):
 
 if __name__ == "__main__":
     # Parse data
+    data = parse_data()
+    if data is None:
+        sys.exit(0)
+    
     (
         movies,
         actors,
@@ -189,7 +193,7 @@ if __name__ == "__main__":
         actor_to_movies,
         shortest_ladder_queries,
         chillest_ladder_queries,
-    ) = parse_data()
+    ) = data
 
     # Find all components
     components = find_components(actors, actor_to_movies, movie_to_actors)
