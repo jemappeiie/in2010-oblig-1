@@ -6,7 +6,7 @@ def debug(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-def main():
+def parse_data():
     input_stream = sys.stdin
 
     movies = {}
@@ -40,31 +40,31 @@ def main():
         movie_to_actors[movie_id].append(actor_id)
         actor_to_movies[actor_id].append(movie_id)
 
-    # Shortest ladder requests
+    # Shortest ladder queries
     Qs = int(input_stream.readline().strip())
-    shortest_ladder_requests = []
+    shortest_ladder_queries = []
     for _ in range(Qs):
         first_actor_id, second_actor_id = (
             input_stream.readline().rstrip("\n").split("\t")
         )
-        shortest_ladder_requests.append((first_actor_id, second_actor_id))
+        shortest_ladder_queries.append((first_actor_id, second_actor_id))
 
-    # Chillest ladder requests
+    # Chillest ladder queries
     Qc = int(input_stream.readline().strip())
-    chillest_ladder_requests = []
+    chillest_ladder_queries = []
     for _ in range(Qc):
         first_actor_id, second_actor_id = (
             input_stream.readline().rstrip("\n").split("\t")
         )
-        chillest_ladder_requests.append((first_actor_id, second_actor_id))
+        chillest_ladder_queries.append((first_actor_id, second_actor_id))
 
     return (
         movies,
         actors,
         movie_to_actors,
         actor_to_movies,
-        shortest_ladder_requests,
-        chillest_ladder_requests,
+        shortest_ladder_queries,
+        chillest_ladder_queries,
     )
 
 
@@ -176,27 +176,34 @@ def find_components(actors, actor_to_movies, movie_to_actors):
                             queue.append(actor_id)
 
             components.append((current_component_movies, current_component_actors))
+
     return components
 
 
 if __name__ == "__main__":
+    # Parse data
     (
         movies,
         actors,
         movie_to_actors,
         actor_to_movies,
-        shortest_ladder_requests,
-        chillest_ladder_requests,
-    ) = main()
+        shortest_ladder_queries,
+        chillest_ladder_queries,
+    ) = parse_data()
 
+    # Find all components
     components = find_components(actors, actor_to_movies, movie_to_actors)
+    # Count all components of unique sizes, where size is defined as the number of actors in a component.
     component_sizes = Counter(len(actors) for movies, actors in components)
+    # Print the number of components with unique sizes
     print(len(component_sizes))
     for size, count in sorted(component_sizes.items()):
         print(f"There are {count} components of size {size}")
 
-    for a, b in shortest_ladder_requests:
+    # Print the answers to the queries about the shortest paths
+    for a, b in shortest_ladder_queries:
         print("\t".join(shortest_path(a, b, actor_to_movies, movie_to_actors)))
 
-    for a, b in chillest_ladder_requests:
+    # Print the answers to the queries about the chillest paths
+    for a, b in chillest_ladder_queries:
         print("\t".join(chillest_path(a, b, movies, actor_to_movies, movie_to_actors)))
