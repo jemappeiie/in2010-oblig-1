@@ -153,7 +153,7 @@ if __name__ == "__main__":
     ) = main()
 
     for a, b in shortest_ladder_requests:
-        print(shortest_path(a, b, actor_to_movies, movie_to_actors))
+        print(" ".join(shortest_path(a, b, actor_to_movies, movie_to_actors)))
 
     for a, b in chillest_ladder_requests:
-        print(chillest_path(a, b, movies, actor_to_movies, movie_to_actors))
+        print(" ".join(chillest_path(a, b, movies, actor_to_movies, movie_to_actors)))
