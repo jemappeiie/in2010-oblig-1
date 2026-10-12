@@ -1,5 +1,5 @@
 import sys
-from collections import defaultdict, deque
+from collections import defaultdict, deque, Counter
 
 
 def debug(*args, **kwargs):
@@ -103,6 +103,44 @@ def shortest_path(start_actor, goal_actor, actor_to_movies, movie_to_actors):
     return []
 
 
+def find_components(actors, actor_to_movies, movie_to_actors):
+    visited_movies = set()
+    visited_actors = set()
+    components = []
+
+    for actor in actors:
+        if actor not in visited_actors:
+            current_component_movies = set()
+            current_component_actors = {actor}
+
+            # Add to global visited set
+            visited_actors.add(actor)
+            queue = deque([actor])
+
+            # While queue is not empty
+            while queue:
+                current_id = queue.popleft()
+                if current_id.startswith("nm"):
+                    # Every movie with this actor
+                    for movie_id in actor_to_movies[current_id]:
+                        # We want to visit each node exactly once
+                        if movie_id not in visited_movies:
+                            visited_movies.add(movie_id)
+                            current_component_movies.add(movie_id)
+                            queue.append(movie_id)
+                else:
+                    # Every actor in this movie
+                    for actor_id in movie_to_actors[current_id]:
+                        # We want to visit each node exactly once
+                        if actor_id not in visited_actors:
+                            visited_actors.add(actor_id)
+                            current_component_actors.add(actor_id)
+                            queue.append(actor_id)
+
+            components.append((current_component_movies, current_component_actors))
+    return components
+
+
 if __name__ == "__main__":
     (
         movies,
@@ -112,6 +150,12 @@ if __name__ == "__main__":
         shortest_ladder_requests,
         chillest_ladder_requests,
     ) = main()
+
+    components = find_components(actors, actor_to_movies, movie_to_actors)
+    print(len(components))
+    component_sizes = Counter(len(actors) for movies, actors in components)
+    for size, count in sorted(component_sizes.items()):
+        print(f"There are {count} components of size {size}")
 
     for a, b in shortest_ladder_requests:
         print(shortest_path(a, b, actor_to_movies, movie_to_actors))
