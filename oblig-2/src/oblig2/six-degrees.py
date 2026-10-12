@@ -7,7 +7,6 @@ def debug(*args, **kwargs):
 
 
 def main():
-    debug("Dette er et eksempel på å printe debug info. Du kan slette denne linjen")
     input_stream = sys.stdin
 
     movies = {}
@@ -197,7 +196,7 @@ if __name__ == "__main__":
         print(f"There are {count} components of size {size}")
 
     for a, b in shortest_ladder_requests:
-        print(" ".join(shortest_path(a, b, actor_to_movies, movie_to_actors)))
+        print("\t".join(shortest_path(a, b, actor_to_movies, movie_to_actors)))
 
     for a, b in chillest_ladder_requests:
-        print(" ".join(chillest_path(a, b, movies, actor_to_movies, movie_to_actors)))
+        print("\t".join(chillest_path(a, b, movies, actor_to_movies, movie_to_actors)))
