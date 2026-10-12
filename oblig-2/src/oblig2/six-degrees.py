@@ -1,4 +1,4 @@
-import sys
+import sys, heapq  # builtin priority queue
 from collections import defaultdict, deque
 
 
@@ -103,6 +103,45 @@ def shortest_path(start_actor, goal_actor, actor_to_movies, movie_to_actors):
     return []
 
 
+def chillest_path(start_actor, goal_actor, movies, actor_to_movies, movie_to_actors):
+    if start_actor == goal_actor:
+        return [start_actor]
+
+    dist = {start_actor: 0.0}
+    parent = {start_actor: None}
+    pq = [(0.0, start_actor)]  # priority queue, (distance + current actor)
+    visited = set()  # use set for final shortest path to prevent double checking
+
+    while pq:
+        d, current = heapq.heappop(pq)
+
+        if current in visited:
+            continue
+        visited.add(current)
+
+        if current == goal_actor:
+            return reconstruct_path(parent, goal_actor)
+
+        if current.startswith("nm"):
+            # actor -> movies
+            for m in actor_to_movies[current]:
+                weight = 10.0 - movies[m][1]  # movies[id] = (title, rating)
+                new_d = d + weight
+                if new_d < dist.get(m, float("inf")):
+                    dist[m] = new_d
+                    parent[m] = current
+                    heapq.heappush(pq, (new_d, m))
+        else:
+            # movie -> actors
+            for a in movie_to_actors[current]:
+                if d < dist.get(a, float("inf")):
+                    dist[a] = d
+                    parent[a] = current
+                    heapq.heappush(pq, (d, a))
+
+    return []
+
+
 if __name__ == "__main__":
     (
         movies,
@@ -115,3 +154,6 @@ if __name__ == "__main__":
 
     for a, b in shortest_ladder_requests:
         print(shortest_path(a, b, actor_to_movies, movie_to_actors))
+
+    for a, b in chillest_ladder_requests:
+        print(chillest_path(a, b, movies, actor_to_movies, movie_to_actors))
