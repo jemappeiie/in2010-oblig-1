@@ -1,5 +1,5 @@
 import sys
-from collections import defaultdict
+from collections import defaultdict, deque
 
 
 def debug(*args, **kwargs):
@@ -69,6 +69,40 @@ def main():
     )
 
 
+def reconstruct_path(parent, node):
+    path = []
+    while node is not None:
+        path.append(node)
+        node = parent[node]
+    path.reverse()
+    return path
+
+
+def shortest_path(start_actor, goal_actor, actor_to_movies, movie_to_actors):
+    if start_actor == goal_actor:
+        return [start_actor]
+
+    parent = {start_actor: None}
+    queue = deque([start_actor])
+
+    while queue:
+        current = queue.popleft()
+        if current.startswith("nm"):
+            neighbors = actor_to_movies[current]  # actor -> movies
+        else:
+            neighbors = movie_to_actors[current]  # movie -> actors
+
+        for n in neighbors:
+            if n in parent:  # already discovered
+                continue
+            parent[n] = current
+            if n == goal_actor:  # reached the goal
+                return reconstruct_path(parent, goal_actor)
+            queue.append(n)
+
+    return []
+
+
 if __name__ == "__main__":
     (
         movies,
@@ -78,5 +112,6 @@ if __name__ == "__main__":
         shortest_ladder_requests,
         chillest_ladder_requests,
     ) = main()
-    for m in movies:
-        print(m)
+
+    for a, b in shortest_ladder_requests:
+        print(shortest_path(a, b, actor_to_movies, movie_to_actors))
