@@ -180,6 +180,9 @@ def find_components(actors, actor_to_movies, movie_to_actors):
 
 
 if __name__ == "__main__":
+    data = main()
+    if data is None:
+        sys.exit(0)
     (
         movies,
         actors,
@@ -187,7 +190,7 @@ if __name__ == "__main__":
         actor_to_movies,
         shortest_ladder_requests,
         chillest_ladder_requests,
-    ) = main()
+    ) = data
 
     components = find_components(actors, actor_to_movies, movie_to_actors)
     component_sizes = Counter(len(actors) for movies, actors in components)
