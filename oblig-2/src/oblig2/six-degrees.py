@@ -191,8 +191,8 @@ if __name__ == "__main__":
     ) = main()
 
     components = find_components(actors, actor_to_movies, movie_to_actors)
-    print(len(components))
     component_sizes = Counter(len(actors) for movies, actors in components)
+    print(len(component_sizes))
     for size, count in sorted(component_sizes.items()):
         print(f"There are {count} components of size {size}")
 
