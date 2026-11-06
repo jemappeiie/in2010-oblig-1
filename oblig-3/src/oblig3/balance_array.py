@@ -1,4 +1,3 @@
-import heapq
 import sys
 
 
@@ -14,8 +13,8 @@ def print_balanced(array, low, high):
     if low > high:
         return
 
-    # Find the middle index
-    middle = (low + high) // 2  # e.g. 5/2=2.5 -> 2
+    # Find the middle index (for subtrees as well)
+    middle = (low + high) // 2
 
     # Print the middle element (root)
     print(array[middle])
